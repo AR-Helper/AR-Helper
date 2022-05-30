@@ -8,7 +8,7 @@ public class Main
 {
     public static Main INSTANCE = new Main();
 
-    public byte[] FormatSerializable(object serializable)
+    public static byte[] FormatSerializable(object serializable)
     {
         BinaryFormatter formatter = new BinaryFormatter();
         using (MemoryStream memoryStream = new MemoryStream())
@@ -18,7 +18,7 @@ public class Main
         }
     }
 
-    public Type DeserializeFormatted<Type>(byte[] formatRes)
+    public static Type DeserializeFormatted<Type>(byte[] formatRes)
         where Type : class
     {
         BinaryFormatter formatter = new BinaryFormatter();
@@ -32,15 +32,24 @@ public class Main
     // {
     //     throw new System.NotImplementedException();
     // }
-    public byte[] ReadPersistentSimpleFile(string filename)
+    public static byte[] ReadPersistentSimpleFile(string filename)
     {
-        string persistentFileName = Path.Combine(Application.persistentDataPath, filename);
+        string persistentFileName = Path.GetFullPath(Path.Combine(Application.persistentDataPath, filename));
+        // Debug.Log("ReadPersistentSimpleFile: " + persistentFileName);
+        
         return File.ReadAllBytes(persistentFileName);
     }
 
-    public void SavePersistentSimpleFile(string filename, byte[] content)
+    public static void SavePersistentSimpleFile(string filename, byte[] content)
     {
-        string persistentFileName = Path.Combine(Application.persistentDataPath, filename);
-        throw new System.NotImplementedException();
+        string persistentFileName = Path.GetFullPath(Path.Combine(Application.persistentDataPath, filename));
+        // Debug.Log("SavePersistentSimpleFile: " + persistentFileName);
+
+        using (File.Create(persistentFileName)) {}
+        // Debug.Log("? content: " + content.Length);
+        
+        File.WriteAllBytes(persistentFileName, content);
+        // File.WriteAllBytes(@"C:\Users\ytchou113\AppData\LocalLow\DefaultCompany\AR-Helper2\testSaveProperty.dat", content);
+        // File.WriteAllText(@"C:\Users\ytchou113\AppData\LocalLow\DefaultCompany\AR-Helper2\hi.txt", "hello, world!");
     }
 }

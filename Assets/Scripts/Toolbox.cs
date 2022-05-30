@@ -85,11 +85,11 @@ public class Toolbox : MonoBehaviour
         
         byteArrayToStringUnaryOp base64 = (byteArray) => System.Convert.ToBase64String(byteArray);
         
-        byte[] formatRes = Main.INSTANCE.FormatSerializable(property);
+        byte[] formatRes = Main.FormatSerializable(property);
         Debug.LogFormat("Serialize result: {0}", base64(formatRes));
         
-        ToolProperty property1 = Main.INSTANCE.DeserializeFormatted<ToolProperty>(formatRes);
-        Debug.LogFormat("Re-serialized result: {0}", base64(Main.INSTANCE.FormatSerializable(property1)));
+        ToolProperty property1 = Main.DeserializeFormatted<ToolProperty>(formatRes);
+        Debug.LogFormat("Re-serialized result: {0}", base64(Main.FormatSerializable(property1)));
 
 
         Debug.Log(property.position + " " + property1.position);
@@ -111,14 +111,20 @@ public class Toolbox : MonoBehaviour
             }
         ;
         
-        Main.INSTANCE.SavePersistentSimpleFile("testSaveProperty.dat", Main.INSTANCE.FormatSerializable(property));
+        Main.SavePersistentSimpleFile("testSaveProperty.dat", Main.FormatSerializable(property));
+
+        ToolProperty property1 = Main.DeserializeFormatted<ToolProperty>(Main.ReadPersistentSimpleFile("testSaveProperty.dat"));
+
+        Debug.Log(property.position + " " + property1.position);
+        Debug.Log(property.rotation + " " + property1.rotation);
+        Debug.Log(property.scale    + " " + property1.scale   );
     }
 
     // Start is called before the first frame update
     void Start()
     {
         // testProperty();
-        
+        // testSaveProperty();
     }
 
     // Update is called once per frame
