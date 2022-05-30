@@ -9,6 +9,47 @@ using UnityEngine;
 public class Toolbox : MonoBehaviour
 {
     [Serializable]
+    public class Quaternion
+    {
+        public float x;
+        public float y;
+        public float z;
+        public float w;
+        
+        public Quaternion(float x, float y, float z, float w)
+        {
+            this.x = x;
+            this.y = y;
+            this.z = z;
+            this.w = w;
+        }
+
+        public static implicit operator Quaternion(UnityEngine.Quaternion quaternion)
+        {
+            return new Quaternion(quaternion.x, quaternion.y, quaternion.z, quaternion.w);
+        }
+
+        public static implicit operator UnityEngine.Quaternion(Quaternion quaternion)
+        {
+            return new UnityEngine.Quaternion(quaternion.x, quaternion.y, quaternion.z, quaternion.w);
+        }
+
+        public override string ToString()
+        {
+            return 
+                string.Format(
+                    "{0}({1}, {2}, {3}, {4})",
+                    GetType(),
+                    x,
+                    y,
+                    z,
+                    w
+                )
+            ;
+        }
+    }
+
+    [Serializable]
     public class Vector3
     {
         public float x;
@@ -53,11 +94,29 @@ public class Toolbox : MonoBehaviour
     }
 
     [Serializable]
-    class ToolProperty
+    public class ToolProperty
     {
         public Vector3 position;
-        public Vector3 rotation;
+        public Quaternion rotation;
         public Vector3 scale;
+
+        public static ToolProperty FromTransform(Transform transform, Transform origin)
+        {
+            return
+                new ToolProperty {
+                    position = transform.position - origin.position,
+                    rotation = transform.rotation,
+                    scale    = transform.localScale,
+                }
+            ;
+        }
+
+        public static void SetTransform(ref Transform transform, ToolProperty property, Transform origin)
+        {
+            transform.position = property.position + origin.position;
+            transform.rotation = property.rotation;
+            transform.localScale = property.scale;
+        }
     }
 
     delegate string byteArrayToStringUnaryOp(byte[] from);
@@ -67,8 +126,8 @@ public class Toolbox : MonoBehaviour
         ToolProperty property = 
             new ToolProperty { 
                 position = new Vector3(1, 2, 3),
-                rotation = new Vector3(4, 5, 6),
-                scale    = new Vector3(7, 8, 9),
+                rotation = new Quaternion(4, 5, 6, 7),
+                scale    = new Vector3(8, 9, 10),
             }
         ;
         
@@ -106,8 +165,8 @@ public class Toolbox : MonoBehaviour
         ToolProperty property = 
             new ToolProperty { 
                 position = new Vector3(1, 2, 3),
-                rotation = new Vector3(4, 5, 6),
-                scale    = new Vector3(7, 8, 9),
+                rotation = new Quaternion(4, 5, 6, 7),
+                scale    = new Vector3(8, 9, 10),
             }
         ;
         

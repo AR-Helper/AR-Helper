@@ -52,4 +52,16 @@ public class Main
         // File.WriteAllBytes(@"C:\Users\ytchou113\AppData\LocalLow\DefaultCompany\AR-Helper2\testSaveProperty.dat", content);
         // File.WriteAllText(@"C:\Users\ytchou113\AppData\LocalLow\DefaultCompany\AR-Helper2\hi.txt", "hello, world!");
     }
+
+    public static void SaveTransformToFile(Transform transform, Transform origin, string filename)
+    {
+        Toolbox.ToolProperty property = Toolbox.ToolProperty.FromTransform(transform, origin);
+        Main.SavePersistentSimpleFile(filename, Main.FormatSerializable(property));
+    }
+
+    public static void SetTransformFromFile(ref Transform transform, Transform origin, string filename)
+    {
+        Toolbox.ToolProperty property = Main.DeserializeFormatted<Toolbox.ToolProperty>(Main.ReadPersistentSimpleFile(filename));
+        Toolbox.ToolProperty.SetTransform(ref transform, property, origin);
+    }
 }
