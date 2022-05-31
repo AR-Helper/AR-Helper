@@ -35,7 +35,9 @@ public class ToolBoxManager : MonoBehaviour
     [SerializeField]
     GameObject Template_IconPointer_Arrow;
 
-    
+    [SerializeField]
+    GameObject Icon_hide;
+    bool isToolBoxHide;
 
     public static ToolBoxManager toolBoxManager;
     // Start is called before the first frame update
@@ -52,11 +54,13 @@ public class ToolBoxManager : MonoBehaviour
         }
 
         Icon_SetEventClick();
-        minBorder_IconPointer = -400f/1920f;
+        minBorder_IconPointer = -850f/1920f;
         curmaxBorder_IconPointer = minBorder_IconPointer;
 
-        maxBorder_IconPointer = 650f/1920f;
+        maxBorder_IconPointer = 950f/1920f;
         distance_IconPointer = 150f / 1920f;
+
+        isToolBoxHide = false;
     }
 
     // Update is called once per frame
@@ -82,7 +86,28 @@ public class ToolBoxManager : MonoBehaviour
         myUnityAction_Arrow += ArrowIconClick;
         Icon_Arrow.GetComponent<ToolBoxIcon>().AddEventClick(myUnityAction_Arrow);
 
+        Icon_hide.GetComponent<ToolBoxIcon>().AddEventClick(HideToolBox);
+
         
+    }
+
+    void HideToolBox()
+    {
+        if (isToolBoxHide == true)
+        {
+            Vector2 pos = toolBox.GetComponent<RectTransform>().anchoredPosition;
+            pos.x = -750f/1920f * Screen.width;
+            toolBox.GetComponent<RectTransform>().anchoredPosition = pos;
+            isToolBoxHide = false;
+            
+        }
+        else 
+        {
+            Vector2 pos = toolBox.GetComponent<RectTransform>().anchoredPosition;
+            pos.x = -1300/1920f * Screen.width;
+            toolBox.GetComponent<RectTransform>().anchoredPosition = pos;
+            isToolBoxHide = true;
+        }
     }
 
     void ArrowIconClick()
