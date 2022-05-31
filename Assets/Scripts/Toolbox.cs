@@ -196,7 +196,7 @@ public class Toolbox : MonoBehaviour
         Transform testOrigin = GameObject.Find("TestOriginPlane").transform;
         
         string loadFileName = "cubepos.dat";
-        Main.SetTransformFromFile(ref testCube, testOrigin, loadFileName);
+        Main.LoadTransformFromFile(ref testCube, testOrigin, loadFileName);
         
         Debug.Log("testTransformLoad: file loaded.");
     }

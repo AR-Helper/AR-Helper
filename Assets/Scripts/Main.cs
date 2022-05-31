@@ -59,7 +59,7 @@ public class Main
         Main.SavePersistentSimpleFile(filename, Main.FormatSerializable(property));
     }
 
-    public static void SetTransformFromFile(ref Transform transform, Transform origin, string filename)
+    public static void LoadTransformFromFile(ref Transform transform, Transform origin, string filename)
     {
         Toolbox.ToolProperty property = Main.DeserializeFormatted<Toolbox.ToolProperty>(Main.ReadPersistentSimpleFile(filename));
         Toolbox.ToolProperty.SetTransform(ref transform, property, origin);
