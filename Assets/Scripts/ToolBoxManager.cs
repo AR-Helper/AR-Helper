@@ -30,6 +30,7 @@ public class ToolBoxManager : MonoBehaviour
     List<GameObject> myIconPointerList;
     float minBorder_IconPointer;
     float maxBorder_IconPointer;
+    float curmaxBorder_IconPointer;
     float distance_IconPointer;
     [SerializeField]
     GameObject Template_IconPointer_Arrow;
@@ -52,6 +53,8 @@ public class ToolBoxManager : MonoBehaviour
 
         Icon_SetEventClick();
         minBorder_IconPointer = -400f/1920f;
+        curmaxBorder_IconPointer = minBorder_IconPointer;
+
         maxBorder_IconPointer = 650f/1920f;
         distance_IconPointer = 150f / 1920f;
     }
@@ -86,7 +89,7 @@ public class ToolBoxManager : MonoBehaviour
     {
         GameObject tmp_icon = GameObject.Instantiate(Template_IconPointer_Arrow, Template_IconPointer_Arrow.transform.parent);
 
-        tmp_icon.transform.localPosition = Template_IconPointer_Arrow.transform.localPosition + distance_IconPointer * Screen.width * myIconPointerList.Count * Vector3.right;//改初始位置
+        tmp_icon.transform.localPosition = Template_IconPointer_Arrow.transform.localPosition + distance_IconPointer * myIconPointerList.Count * Screen.width * Vector3.right;//改初始位置
         tmp_icon.SetActive(true);
 
         GameObject tmp = GameObject.Instantiate(Template_Arrow,curTarget.transform);
@@ -94,9 +97,13 @@ public class ToolBoxManager : MonoBehaviour
         tmp.SetActive(true);
 
         tmp_icon.GetComponent<IconPointer>().Setobj(tmp);
-        tmp_icon.GetComponent<IconPointer>().Setidx(myIconPointerList.Count - 1);
+        tmp_icon.GetComponent<IconPointer>().Setidx(myIconPointerList.Count);
         tmp_icon.GetComponent<IconPointer>().buttonClicked += ShowIconPointerInList;
-
+        curmaxBorder_IconPointer += distance_IconPointer ;
+        if (curmaxBorder_IconPointer > maxBorder_IconPointer)
+        {
+            curmaxBorder_IconPointer = maxBorder_IconPointer;
+        }
 
         myIconPointerList.Add(tmp_icon);
         ShowIconPointerInList(myIconPointerList.Count-1);
@@ -127,7 +134,13 @@ public class ToolBoxManager : MonoBehaviour
     }
     public float GetMaxBorfer_IconPointer()
     {
-        return maxBorder_IconPointer;
+        return curmaxBorder_IconPointer;
+        ;
+    }
+
+    public float GetDistance_IconPointer()
+    {
+        return distance_IconPointer;
     }
 
     void CheckIndex_IconPointer()
@@ -136,19 +149,33 @@ public class ToolBoxManager : MonoBehaviour
         {
             return;
         }
-        for (int i = 0; i < myIconPointerList.Count; i++)
+        for (int i = 0; i < myIconPointerList.Count-1; i++)
         {
-            for (int j = i; j < myIconPointerList.Count; j++)
+            int j = i + 1;
+            if (myIconPointerList[i].GetComponent<RectTransform>().anchoredPosition.x > myIconPointerList[j].GetComponent<RectTransform>().anchoredPosition.x)
             {
-                if (myIconPointerList[i].GetComponent<RectTransform>().anchoredPosition.x > myIconPointerList[j].GetComponent<RectTransform>().anchoredPosition.x)
+                GameObject tmp = myIconPointerList[i];
+                if (!myIconPointerList[i].GetComponent<IconPointer>().isBottonClicked())
                 {
-                    GameObject tmp = myIconPointerList[i];
-                    myIconPointerList[i] = myIconPointerList[j];
-                    myIconPointerList[i].GetComponent<IconPointer>().Setidx(j);
-                    myIconPointerList[j] = tmp;
-                    myIconPointerList[j].GetComponent<IconPointer>().Setidx(i);
+                    Vector2 pos = myIconPointerList[j].GetComponent<RectTransform>().anchoredPosition;
+                    pos.x = minBorder_IconPointer * Screen.width + j * distance_IconPointer * Screen.width;
+                    myIconPointerList[i].GetComponent<RectTransform>().anchoredPosition = pos;
                 }
+
+
+                if (!myIconPointerList[j].GetComponent<IconPointer>().isBottonClicked())
+                {
+                    Vector2 pos = myIconPointerList[i].GetComponent<RectTransform>().anchoredPosition;
+                    pos.x = minBorder_IconPointer * Screen.width + i * distance_IconPointer * Screen.width;
+                    myIconPointerList[j].GetComponent<RectTransform>().anchoredPosition = pos;
+                }
+
+                myIconPointerList[i] = myIconPointerList[j];
+                myIconPointerList[i].GetComponent<IconPointer>().Setidx(i);
+                myIconPointerList[j] = tmp;
+                myIconPointerList[j].GetComponent<IconPointer>().Setidx(j);
             }
+            
         }
     }
 
