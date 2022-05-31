@@ -179,6 +179,28 @@ public class Toolbox : MonoBehaviour
         Debug.Log(property.scale    + " " + property1.scale   );
     }
 
+    void testTransformSave()
+    {
+        Transform testCube = GameObject.Find("TestCube").transform;
+        Transform testOrigin = GameObject.Find("TestOriginPlane").transform;
+        
+        string saveFileName = "cubepos.dat";
+        Main.SaveTransformToFile(testCube, testOrigin, saveFileName);
+
+        Debug.Log("testTransformSave: file saved.");
+    }
+
+    void testTransformLoad()
+    {
+        Transform testCube = GameObject.Find("TestCube").transform;
+        Transform testOrigin = GameObject.Find("TestOriginPlane").transform;
+        
+        string loadFileName = "cubepos.dat";
+        Main.SetTransformFromFile(ref testCube, testOrigin, loadFileName);
+        
+        Debug.Log("testTransformLoad: file loaded.");
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -189,6 +211,14 @@ public class Toolbox : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // if (Input.GetKeyDown("s"))
+        // {
+        //     testTransformSave();
+        // }
         
+        // if (Input.GetKeyDown("l"))
+        // {
+        //     testTransformLoad();
+        // }
     }
 }
