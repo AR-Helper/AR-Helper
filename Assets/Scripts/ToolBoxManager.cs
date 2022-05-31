@@ -35,7 +35,10 @@ public class ToolBoxManager : MonoBehaviour
     [SerializeField]
     GameObject Template_IconPointer_Arrow;
 
-    
+    public List<GameObject> GetMyIconPointerList()
+    {
+        return myIconPointerList;
+    }
 
     public static ToolBoxManager toolBoxManager;
     // Start is called before the first frame update
@@ -52,10 +55,10 @@ public class ToolBoxManager : MonoBehaviour
         }
 
         Icon_SetEventClick();
-        minBorder_IconPointer = -400f/1920f;
+        minBorder_IconPointer = -850f/1920f;
         curmaxBorder_IconPointer = minBorder_IconPointer;
 
-        maxBorder_IconPointer = 650f/1920f;
+        maxBorder_IconPointer = 950f/1920f;
         distance_IconPointer = 150f / 1920f;
     }
 
@@ -85,7 +88,7 @@ public class ToolBoxManager : MonoBehaviour
         
     }
 
-    void ArrowIconClick()
+    public void ArrowIconClick()
     {
         GameObject tmp_icon = GameObject.Instantiate(Template_IconPointer_Arrow, Template_IconPointer_Arrow.transform.parent);
 

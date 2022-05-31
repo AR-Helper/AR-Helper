@@ -28,13 +28,18 @@ public class Main
         }
     }
 
+    private static string GetPersitentLocation(string filename)
+    {
+        return Path.GetFullPath(Path.Combine(Application.persistentDataPath, filename));
+    }
+
     // public FileStream GetPersistentFileStream(string filename)
     // {
     //     throw new System.NotImplementedException();
     // }
     public static byte[] ReadPersistentSimpleFile(string filename)
     {
-        string persistentFileName = Path.GetFullPath(Path.Combine(Application.persistentDataPath, filename));
+        string persistentFileName = GetPersitentLocation(filename); // Path.GetFullPath(Path.Combine(Application.persistentDataPath, filename));
         // Debug.Log("ReadPersistentSimpleFile: " + persistentFileName);
         
         return File.ReadAllBytes(persistentFileName);
@@ -42,7 +47,7 @@ public class Main
 
     public static void SavePersistentSimpleFile(string filename, byte[] content)
     {
-        string persistentFileName = Path.GetFullPath(Path.Combine(Application.persistentDataPath, filename));
+        string persistentFileName = GetPersitentLocation(filename); // Path.GetFullPath(Path.Combine(Application.persistentDataPath, filename));
         // Debug.Log("SavePersistentSimpleFile: " + persistentFileName);
 
         using (File.Create(persistentFileName)) {}
@@ -63,5 +68,78 @@ public class Main
     {
         Toolbox.ToolProperty property = Main.DeserializeFormatted<Toolbox.ToolProperty>(Main.ReadPersistentSimpleFile(filename));
         Toolbox.ToolProperty.SetTransform(ref transform, property, origin);
+    }
+
+    public static void SaveToolboxManager(string foldername, ToolBoxManager manager, Transform origin)
+    {
+        foreach (GameObject gameObject in manager.GetMyIconPointerList())
+        {
+            IconPointer iconPointer = gameObject.GetComponent<IconPointer>();
+            Transform targetTransform = gameObject.transform; //iconPointer.Getobj().transform;
+
+            // toolproperty v1
+            string filename = Path.Join(foldername, string.Format("obj{0}.toolproperty", iconPointer.Getidx()));
+            SaveTransformToFile(targetTransform, origin, filename);
+        }
+    }
+
+    public static void LoadToolboxManager(string foldername, ToolBoxManager manager, Transform origin)
+    {
+        // TODO: simulate, any other way?
+        string[] toolProperties = Directory.GetFiles(GetPersitentLocation(foldername)); // DirectoryNotFoundException
+        List<Toolbox.ToolProperty> properties = new List<Toolbox.ToolProperty>();
+        
+        int maxIdx = 0;
+        foreach (string propertyFile in toolProperties)
+        {
+            int idx = -1;
+            {
+                string filename = Path.GetFileName(propertyFile);
+
+                int idxStart = "obj".Length;
+                int idxEnd = filename.Length - ".toolproperty".Length;
+                
+                string indexStr = filename.Substring(idxStart, idxEnd - idxStart);
+                if (!int.TryParse(indexStr, out idx) || !(idx >= 0))
+                {
+                    Debug.LogWarningFormat("Skipping invalid file {0} with index {1}", propertyFile, indexStr);
+                }
+            }
+
+            maxIdx = System.Math.Max(maxIdx, idx);
+        }
+
+        if (maxIdx != toolProperties.Length - 1)
+        {
+            Debug.LogWarningFormat("maxIdx != toolProperties.Length - 1 (is {0} and {1})", maxIdx, toolProperties.Length - 1);
+        }
+
+        for (int i = 0; i < maxIdx + 1; i++)
+        {
+            manager.ArrowIconClick(); // simulate creation
+        }
+
+        var pointerList = manager.GetMyIconPointerList();
+        foreach (string propertyFile in toolProperties)
+        {
+            int idx = -1;
+            {
+                string filename = Path.GetFileName(propertyFile);
+
+                int idxStart = "obj".Length;
+                int idxEnd = filename.Length - ".toolproperty".Length;
+                
+                string indexStr = filename.Substring(idxStart, idxEnd - idxStart);
+                if (!int.TryParse(indexStr, out idx) || !(idx >= 0))
+                {
+                    Debug.LogWarningFormat("Skipping invalid file {0} with index {1}", propertyFile, indexStr);
+                }
+            }
+
+            Transform targetTransform = pointerList[idx].transform;
+            LoadTransformFromFile(ref targetTransform, origin, propertyFile);
+        }
+
+        
     }
 }
