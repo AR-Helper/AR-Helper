@@ -109,7 +109,7 @@ public class ToolBoxManager : MonoBehaviour
     {
         myUnityAction_Arrow += ArrowIconClick;
         Icon_Arrow.GetComponent<ToolBoxIcon>().AddEventClick(myUnityAction_Arrow);
-
+        Icon_hide.GetComponent<ToolBoxIcon>().AddEventClick(HideToolBox);
         
     }
 
