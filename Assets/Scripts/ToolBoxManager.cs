@@ -34,6 +34,29 @@ public class ToolBoxManager : MonoBehaviour
     float distance_IconPointer;
     [SerializeField]
     GameObject Template_IconPointer_Arrow;
+    
+    [SerializeField]
+    GameObject Icon_hide;
+    bool isToolBoxHide;
+    
+    void HideToolBox()
+    {
+        if (isToolBoxHide == true)
+        {
+            Vector2 pos = toolBox.GetComponent<RectTransform>().anchoredPosition;
+            pos.x = -750f/1920f * Screen.width;
+            toolBox.GetComponent<RectTransform>().anchoredPosition = pos;
+            isToolBoxHide = false;
+
+        }
+        else 
+        {
+            Vector2 pos = toolBox.GetComponent<RectTransform>().anchoredPosition;
+            pos.x = -1300/1920f * Screen.width;
+            toolBox.GetComponent<RectTransform>().anchoredPosition = pos;
+            isToolBoxHide = true;
+        }
+    }
 
     public List<GameObject> GetMyIconPointerList()
     {
@@ -47,7 +70,7 @@ public class ToolBoxManager : MonoBehaviour
         if (toolBoxManager == null)
         {
             toolBoxManager = this;
-            
+
         }
         else 
         {
@@ -60,6 +83,8 @@ public class ToolBoxManager : MonoBehaviour
 
         maxBorder_IconPointer = 950f/1920f;
         distance_IconPointer = 150f / 1920f;
+
+        isToolBoxHide = false;
     }
 
     // Update is called once per frame
