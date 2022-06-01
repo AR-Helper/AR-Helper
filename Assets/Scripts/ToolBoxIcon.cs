@@ -32,6 +32,8 @@ public class ToolBoxIcon : MonoBehaviour
         
         Debug.Log("Tool Clicked");
         mButtonClick();
+
+        GameObject.Find("ButtonSoundFX").GetComponent<AudioSource>().Play();
     }
 
 
