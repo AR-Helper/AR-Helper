@@ -61,16 +61,16 @@ public class Main
         // File.WriteAllText(@"C:\Users\ytchou113\AppData\LocalLow\DefaultCompany\AR-Helper2\hi.txt", "hello, world!");
     }
 
-    public static void SaveTransformToFile(Transform transform, Transform origin, string filename)
+    public static void SaveTransformToFile(GameObject targetObj, Transform origin, string filename)
     {
-        Toolbox.ToolProperty property = Toolbox.ToolProperty.FromTransform(transform, origin);
+        Toolbox.ToolProperty property = Toolbox.ToolProperty.FromTransform(targetObj, origin);
         Main.SavePersistentSimpleFile(filename, Main.FormatSerializable(property));
     }
 
-    public static void LoadTransformFromFile(ref Transform transform, Transform origin, string filename)
+    public static void LoadTransformFromFile(GameObject targetObj, Transform origin, string filename)
     {
         Toolbox.ToolProperty property = Main.DeserializeFormatted<Toolbox.ToolProperty>(Main.ReadPersistentSimpleFile(filename));
-        Toolbox.ToolProperty.SetTransform(ref transform, property, origin);
+        Toolbox.ToolProperty.SetTransform(targetObj, property, origin);
     }
 
     public static void SaveToolboxManager(string foldername, ToolBoxManager manager, Transform origin)
@@ -78,11 +78,12 @@ public class Main
         foreach (GameObject gameObject in manager.GetMyIconPointerList())
         {
             IconPointer iconPointer = gameObject.GetComponent<IconPointer>();
-            Transform targetTransform = iconPointer.Getobj().transform; //gameObject.transform; //iconPointer.Getobj().transform;
+            // Transform targetTransform = iconPointer.Getobj().transform; //gameObject.transform; //iconPointer.Getobj().transform;
+            GameObject targetObj = iconPointer.Getobj();
 
             // toolproperty v1
             string filename = Path.Join(foldername, string.Format("obj{0}.toolproperty", iconPointer.Getidx()));
-            SaveTransformToFile(targetTransform, origin, filename);
+            SaveTransformToFile(targetObj, origin, filename);
 
             Debug.LogFormat("SaveToolboxManager: saved to {0}", filename);
         }
@@ -141,8 +142,9 @@ public class Main
                 }
             }
 
-            Transform targetTransform = pointerList[idx].GetComponent<IconPointer>().Getobj().transform;
-            LoadTransformFromFile(ref targetTransform, origin, propertyFile);
+            //Transform targetTransform = pointerList[idx].GetComponent<IconPointer>().Getobj().transform;
+            GameObject targetObj = pointerList[idx].GetComponent<IconPointer>().Getobj();
+            LoadTransformFromFile(targetObj, origin, propertyFile);
 
             Debug.LogFormat("LoadToolboxManager: loaded from {0}", propertyFile);
         }

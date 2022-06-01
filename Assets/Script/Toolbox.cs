@@ -100,8 +100,16 @@ public class Toolbox : MonoBehaviour
         public Quaternion rotation;
         public Vector3 scale;
 
-        public static ToolProperty FromTransform(Transform transform, Transform origin)
+        // Todo: optimize
+        public string extraMode = "none";
+
+        // text mode
+        public string extText;
+
+        public static ToolProperty FromTransform(GameObject targetObj, Transform origin)
         {
+            Transform transform = targetObj.transform;
+
             return
                 new ToolProperty {
                     position = transform.position - origin.position,
@@ -111,8 +119,24 @@ public class Toolbox : MonoBehaviour
             ;
         }
 
-        public static void SetTransform(ref Transform transform, ToolProperty property, Transform origin)
+        public static ToolProperty FromTransformText(GameObject targetObj, Transform origin)
         {
+            Transform transform = targetObj.transform;
+
+            return
+                new ToolProperty
+                {
+                    position = transform.position - origin.position,
+                    rotation = transform.rotation,
+                    scale = transform.localScale,
+                }
+            ;
+        }
+
+        public static void SetTransform(GameObject targetObj, ToolProperty property, Transform origin)
+        {
+            Transform transform = targetObj.transform;
+
             transform.position = property.position + origin.position;
             transform.rotation = property.rotation;
             transform.localScale = property.scale;
@@ -179,27 +203,27 @@ public class Toolbox : MonoBehaviour
         Debug.Log(property.scale    + " " + property1.scale   );
     }
 
-    void testTransformSave()
-    {
-        Transform testCube = GameObject.Find("TestCube").transform;
-        Transform testOrigin = GameObject.Find("TestOriginPlane").transform;
+    //void testTransformSave()
+    //{
+    //    Transform testCube = GameObject.Find("TestCube").transform;
+    //    Transform testOrigin = GameObject.Find("TestOriginPlane").transform;
         
-        string saveFileName = "cubepos.dat";
-        Main.SaveTransformToFile(testCube, testOrigin, saveFileName);
+    //    string saveFileName = "cubepos.dat";
+    //    Main.SaveTransformToFile(testCube, testOrigin, saveFileName);
 
-        Debug.Log("testTransformSave: file saved.");
-    }
+    //    Debug.Log("testTransformSave: file saved.");
+    //}
 
-    void testTransformLoad()
-    {
-        Transform testCube = GameObject.Find("TestCube").transform;
-        Transform testOrigin = GameObject.Find("TestOriginPlane").transform;
+    //void testTransformLoad()
+    //{
+    //    Transform testCube = GameObject.Find("TestCube").transform;
+    //    Transform testOrigin = GameObject.Find("TestOriginPlane").transform;
         
-        string loadFileName = "cubepos.dat";
-        Main.LoadTransformFromFile(ref testCube, testOrigin, loadFileName);
+    //    string loadFileName = "cubepos.dat";
+    //    Main.LoadTransformFromFile(ref testCube, testOrigin, loadFileName);
         
-        Debug.Log("testTransformLoad: file loaded.");
-    }
+    //    Debug.Log("testTransformLoad: file loaded.");
+    //}
 
     // Start is called before the first frame update
     void Start()
