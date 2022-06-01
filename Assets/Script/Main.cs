@@ -61,10 +61,10 @@ public class Main
         // File.WriteAllText(@"C:\Users\ytchou113\AppData\LocalLow\DefaultCompany\AR-Helper2\hi.txt", "hello, world!");
     }
 
-    public static void SaveTransformToFile(GameObject targetObj, Transform origin, string filename)
+    public static void SaveTransformToFile(GameObject targetObj, Transform origin, string filename, string extramode="none")
     {
-        Toolbox.ToolProperty property = Toolbox.ToolProperty.FromTransform(targetObj, origin);
-        Main.SavePersistentSimpleFile(filename, Main.FormatSerializable(property));
+        //Toolbox.ToolProperty property = Toolbox.ToolProperty.FromTransform(targetObj, origin);
+        //Main.SavePersistentSimpleFile(filename, Main.FormatSerializable(property));
     }
 
     public static void LoadTransformFromFile(GameObject targetObj, Transform origin, string filename)

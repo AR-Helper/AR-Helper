@@ -101,20 +101,26 @@ public class Toolbox : MonoBehaviour
         public Vector3 scale;
 
         // Todo: optimize
-        public string extraMode = "none";
+        public string extraMode;
 
         // text mode
         public string extText;
 
-        public static ToolProperty FromTransform(GameObject targetObj, Transform origin)
+        public static ToolProperty FromTransform(GameObject targetObj, Transform origin, string extraMode)
         {
             Transform transform = targetObj.transform;
+
+            //var textUI = targetObj.GetComponent<UnityEngine.UI.Text>();
+            string extText = extraMode == "text" ? targetObj.GetComponent<UnityEngine.UI.Text>().text : ""; // textUI == null ? "" : textUI.text;
 
             return
                 new ToolProperty {
                     position = transform.position - origin.position,
                     rotation = transform.rotation,
-                    scale    = transform.localScale,
+                    scale = transform.localScale,
+
+                    extraMode = extraMode,
+                    extText = extText,
                 }
             ;
         }
