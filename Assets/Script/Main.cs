@@ -50,9 +50,10 @@ public class Main
         string persistentFileName = GetPersitentLocation(filename); // Path.GetFullPath(Path.Combine(Application.persistentDataPath, filename));
         // Debug.Log("SavePersistentSimpleFile: " + persistentFileName);
 
-        using (File.Create(persistentFileName)) {}
+        // using (File.Create(persistentFileName)) {}
         // Debug.Log("? content: " + content.Length);
-        
+
+        Directory.CreateDirectory(Directory.GetParent(persistentFileName).FullName);
         File.WriteAllBytes(persistentFileName, content);
         // File.WriteAllBytes(@"C:\Users\ytchou113\AppData\LocalLow\DefaultCompany\AR-Helper2\testSaveProperty.dat", content);
         // File.WriteAllText(@"C:\Users\ytchou113\AppData\LocalLow\DefaultCompany\AR-Helper2\hi.txt", "hello, world!");
@@ -75,11 +76,13 @@ public class Main
         foreach (GameObject gameObject in manager.GetMyIconPointerList())
         {
             IconPointer iconPointer = gameObject.GetComponent<IconPointer>();
-            Transform targetTransform = gameObject.transform; //iconPointer.Getobj().transform;
+            Transform targetTransform = iconPointer.Getobj().transform; //gameObject.transform; //iconPointer.Getobj().transform;
 
             // toolproperty v1
             string filename = Path.Join(foldername, string.Format("obj{0}.toolproperty", iconPointer.Getidx()));
             SaveTransformToFile(targetTransform, origin, filename);
+
+            Debug.LogFormat("SaveToolboxManager: saved to {0}", filename);
         }
     }
 
@@ -136,8 +139,10 @@ public class Main
                 }
             }
 
-            Transform targetTransform = pointerList[idx].transform;
+            Transform targetTransform = pointerList[idx].GetComponent<IconPointer>().Getobj().transform;
             LoadTransformFromFile(ref targetTransform, origin, propertyFile);
+
+            Debug.LogFormat("LoadToolboxManager: loaded from {0}", propertyFile);
         }
 
         
