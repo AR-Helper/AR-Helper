@@ -89,6 +89,7 @@ public class IconPointer : MonoBehaviour
 
     private void OnMouseDown()
     {
+        Debug.Log("IconPointer Clicked");
         isclicked = true;
 
     }
