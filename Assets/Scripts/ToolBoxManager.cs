@@ -43,6 +43,21 @@ public class ToolBoxManager : MonoBehaviour
     [SerializeField]
     GameObject Icon_View;
 
+    [SerializeField]
+    GameObject Icon_Keyboard;
+
+    [SerializeField]
+    GameObject Icon_Note;
+
+    public GameObject manualPanelObject;
+
+    void ToggleManaual()
+    {
+        // UnityEngine.UI.Text text = GameObject.Find("ManualText").GetComponent<UnityEngine.UI.Text>();
+        GameObject text = manualPanelObject; // GameObject.Find("ManualPanel");
+        text.SetActive(!text.activeSelf);
+    }
+
     void HideToolBox()
     {
         if (isToolBoxHide == true)
@@ -74,6 +89,12 @@ public class ToolBoxManager : MonoBehaviour
         }
 
         Main.isViewMode = true;
+    }
+
+    void OpenKeyboard()
+    {
+        Debug.Log("OpenKeyboard");
+        GameObject.Find("TextGUI").GetComponent<TextGUI>().OpenKeyboard();
     }
 
     public List<GameObject> GetMyIconPointerList()
@@ -129,6 +150,8 @@ public class ToolBoxManager : MonoBehaviour
         Icon_Arrow.GetComponent<ToolBoxIcon>().AddEventClick(myUnityAction_Arrow);
         Icon_hide.GetComponent<ToolBoxIcon>().AddEventClick(HideToolBox);
         Icon_View.GetComponent<ToolBoxIcon>().AddEventClick(EnterViewMode);
+        Icon_Keyboard.GetComponent<ToolBoxIcon>().AddEventClick(OpenKeyboard);
+        Icon_Note.GetComponent<ToolBoxIcon>().AddEventClick(ToggleManaual);
     }
 
     public void ArrowIconClick()
@@ -203,7 +226,7 @@ public class ToolBoxManager : MonoBehaviour
         for (int i = 0; i < myIconPointerList.Count-1; i++)
         {
             int j = i + 1;
-            if (myIconPointerList[i].GetComponent<RectTransform>().anchoredPosition.x > myIconPointerList[j].GetComponent<RectTransform>().anchoredPosition.x)
+            if (myIconPointerList[i].GetComponent<RectTransform>().anchoredPosition.x > myIconPointerList[j].GetComponent<RectTransform>().anchoredPosition.x && !Main.isViewMode)
             {
                 GameObject tmp = myIconPointerList[i];
                 if (!myIconPointerList[i].GetComponent<IconPointer>().isBottonClicked())
