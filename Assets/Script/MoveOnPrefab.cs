@@ -103,7 +103,7 @@ public class MoveOnPrefab : MonoBehaviour
                 //}
                 //else
                 {
-                    if (onTouch)
+                    if (onTouch && !Main.isViewMode)
                     {
                         //Debug.Log("touchOnBall"+hitpose.position);
                         if(hitImage)

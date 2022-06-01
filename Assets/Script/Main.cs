@@ -8,6 +8,8 @@ public class Main
 {
     public static Main INSTANCE = new Main();
 
+    public static bool isViewMode = false;
+
     public static byte[] FormatSerializable(object serializable)
     {
         BinaryFormatter formatter = new BinaryFormatter();

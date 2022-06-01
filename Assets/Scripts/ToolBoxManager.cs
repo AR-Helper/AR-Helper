@@ -64,12 +64,16 @@ public class ToolBoxManager : MonoBehaviour
 
     void EnterViewMode()
     {
+        Debug.Log("EnterViewMode");
+
         SetToolBoxVisible(false);
         for (int i = 0; i < myIconPointerList.Count; i++)
         {
             Destroy(myIconPointerList[i].GetComponent<IconPointer>().Getobj().GetComponent<LeanPinchScale>());
             Destroy(myIconPointerList[i].GetComponent<IconPointer>().Getobj().GetComponent<LeanTwistRotate>());
         }
+
+        Main.isViewMode = true;
     }
 
     public List<GameObject> GetMyIconPointerList()
@@ -129,10 +133,11 @@ public class ToolBoxManager : MonoBehaviour
 
     public void ArrowIconClick()
     {
-        if(curTarget == null)
+        if(curTarget == null || Main.isViewMode)
         {
             return;
         }
+
         GameObject tmp_icon = GameObject.Instantiate(Template_IconPointer_Arrow, Template_IconPointer_Arrow.transform.parent);
 
         tmp_icon.transform.localPosition = Template_IconPointer_Arrow.transform.localPosition + distance_IconPointer * myIconPointerList.Count  * Vector3.right;//改初始位置
