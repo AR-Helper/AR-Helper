@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
+using Lean.Touch;
 
 
 public class ToolBoxManager : MonoBehaviour
@@ -14,7 +15,7 @@ public class ToolBoxManager : MonoBehaviour
     GameObject toolBox;
     [SerializeField]            //tmp
     GameObject curTarget;
-    int curIconIndex;
+    public int curIconIndex;
 
     [SerializeField]
     GameObject Icon_Arrow;
@@ -38,7 +39,10 @@ public class ToolBoxManager : MonoBehaviour
     [SerializeField]
     GameObject Icon_hide;
     bool isToolBoxHide;
-    
+
+    [SerializeField]
+    GameObject Icon_View;
+
     void HideToolBox()
     {
         if (isToolBoxHide == true)
@@ -55,6 +59,16 @@ public class ToolBoxManager : MonoBehaviour
             pos.x = -1200;
             toolBox.GetComponent<RectTransform>().anchoredPosition = pos;
             isToolBoxHide = true;
+        }
+    }
+
+    void EnterViewMode()
+    {
+        SetToolBoxVisible(false);
+        for (int i = 0; i < myIconPointerList.Count; i++)
+        {
+            Destroy(myIconPointerList[i].GetComponent<IconPointer>().Getobj().GetComponent<LeanPinchScale>());
+            Destroy(myIconPointerList[i].GetComponent<IconPointer>().Getobj().GetComponent<LeanTwistRotate>());
         }
     }
 
@@ -110,11 +124,15 @@ public class ToolBoxManager : MonoBehaviour
         myUnityAction_Arrow += ArrowIconClick;
         Icon_Arrow.GetComponent<ToolBoxIcon>().AddEventClick(myUnityAction_Arrow);
         Icon_hide.GetComponent<ToolBoxIcon>().AddEventClick(HideToolBox);
-        
+        Icon_View.GetComponent<ToolBoxIcon>().AddEventClick(EnterViewMode);
     }
 
     public void ArrowIconClick()
     {
+        if(curTarget == null)
+        {
+            return;
+        }
         GameObject tmp_icon = GameObject.Instantiate(Template_IconPointer_Arrow, Template_IconPointer_Arrow.transform.parent);
 
         tmp_icon.transform.localPosition = Template_IconPointer_Arrow.transform.localPosition + distance_IconPointer * myIconPointerList.Count  * Vector3.right;//改初始位置

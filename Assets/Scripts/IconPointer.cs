@@ -101,7 +101,7 @@ public class IconPointer : MonoBehaviour
             Debug.Log("IconPointer is Clicked");
             buttonClicked(_idx);
         }
-        else 
+        //else
         {
             float dis = ToolBoxManager.toolBoxManager.GetDistance_IconPointer() ;
             float posX = ToolBoxManager.toolBoxManager.GetMinBorder_IconPointer() +_idx * dis;

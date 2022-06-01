@@ -13,7 +13,7 @@ public class MoveOnPrefab : MonoBehaviour
     private Camera arCamera;
     private ARRaycastManager arRaycastManager;
 
-    public GameObject placeObject;
+    //public GameObject placeObject;
     public GameObject placePrefab;
 
     private bool onTouch = false;
@@ -87,11 +87,21 @@ public class MoveOnPrefab : MonoBehaviour
                
                 //Debug.Log("hittype : " + hit.trackableId);
                 Pose hitpose = hits[0].pose;
-                if (placeObject == null)
+
+                ToolBoxManager manager = GameObject.Find("ToolBoxManager").GetComponent<ToolBoxManager>();
+                List<GameObject> pointerList = manager.GetMyIconPointerList();
+
+                if (pointerList.Count == 0)
                 {
-                    placeObject = Instantiate(placePrefab, hitpose.position, Quaternion.identity);
+                    return;
                 }
-                else
+
+                GameObject placeObject = pointerList[manager.curIconIndex].GetComponent<IconPointer>().Getobj();
+                //if (placeObject == null)
+                //{
+                //    placeObject = Instantiate(placePrefab, hitpose.position, Quaternion.identity);
+                //}
+                //else
                 {
                     if (onTouch)
                     {
@@ -99,7 +109,7 @@ public class MoveOnPrefab : MonoBehaviour
                         if(hitImage)
                         {
 
-                            //Debug.Log("setArrawPos");
+                            Debug.Log("setArrawPos");
                             placeObject.transform.position = hitpose.position;
                         }
                         
