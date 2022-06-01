@@ -103,8 +103,8 @@ public class IconPointer : MonoBehaviour
         }
         else 
         {
-            float dis = ToolBoxManager.toolBoxManager.GetDistance_IconPointer() * Screen.width;
-            float posX = ToolBoxManager.toolBoxManager.GetMinBorder_IconPointer() * Screen.width +_idx * dis;
+            float dis = ToolBoxManager.toolBoxManager.GetDistance_IconPointer() ;
+            float posX = ToolBoxManager.toolBoxManager.GetMinBorder_IconPointer() +_idx * dis;
             Vector2 pos = new Vector2(posX, this.gameObject.GetComponent<RectTransform>().anchoredPosition.y);
             this.gameObject.GetComponent<RectTransform>().anchoredPosition = pos;
         }
@@ -114,10 +114,10 @@ public class IconPointer : MonoBehaviour
     {
         //Debug.Log("IconPonter is Draged");
         float posY = this.gameObject.GetComponent<RectTransform>().anchoredPosition.y;
-        float posX = Input.mousePosition.x - Screen.width/2;
-        float dis = ToolBoxManager.toolBoxManager.GetDistance_IconPointer() * Screen.width;
-        float minX = ToolBoxManager.toolBoxManager.GetMinBorder_IconPointer() * Screen.width - dis / 2f;
-        float maxX = ToolBoxManager.toolBoxManager.GetMaxBorfer_IconPointer() * Screen.width + dis / 2f;
+        float posX = 1920f * (Input.mousePosition.x - Screen.width/2)/Screen.width;
+        float dis = ToolBoxManager.toolBoxManager.GetDistance_IconPointer() ;
+        float minX = ToolBoxManager.toolBoxManager.GetMinBorder_IconPointer()  - dis / 2f;
+        float maxX = ToolBoxManager.toolBoxManager.GetMaxBorfer_IconPointer() + dis / 2f;
         
         if (posX < minX )
         {

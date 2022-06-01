@@ -44,7 +44,7 @@ public class ToolBoxManager : MonoBehaviour
         if (isToolBoxHide == true)
         {
             Vector2 pos = toolBox.GetComponent<RectTransform>().anchoredPosition;
-            pos.x = -750f/1920f * Screen.width;
+            pos.x = -600f;
             toolBox.GetComponent<RectTransform>().anchoredPosition = pos;
             isToolBoxHide = false;
 
@@ -52,7 +52,7 @@ public class ToolBoxManager : MonoBehaviour
         else 
         {
             Vector2 pos = toolBox.GetComponent<RectTransform>().anchoredPosition;
-            pos.x = -1300/1920f * Screen.width;
+            pos.x = -1200;
             toolBox.GetComponent<RectTransform>().anchoredPosition = pos;
             isToolBoxHide = true;
         }
@@ -78,11 +78,11 @@ public class ToolBoxManager : MonoBehaviour
         }
 
         Icon_SetEventClick();
-        minBorder_IconPointer = -850f/1920f;
+        minBorder_IconPointer = -850f;
         curmaxBorder_IconPointer = minBorder_IconPointer;
 
-        maxBorder_IconPointer = 950f/1920f;
-        distance_IconPointer = 150f / 1920f;
+        maxBorder_IconPointer = 950f;
+        distance_IconPointer = 150f;
 
         isToolBoxHide = false;
     }
@@ -117,7 +117,7 @@ public class ToolBoxManager : MonoBehaviour
     {
         GameObject tmp_icon = GameObject.Instantiate(Template_IconPointer_Arrow, Template_IconPointer_Arrow.transform.parent);
 
-        tmp_icon.transform.localPosition = Template_IconPointer_Arrow.transform.localPosition + distance_IconPointer * myIconPointerList.Count * Screen.width * Vector3.right;//改初始位置
+        tmp_icon.transform.localPosition = Template_IconPointer_Arrow.transform.localPosition + distance_IconPointer * myIconPointerList.Count  * Vector3.right;//改初始位置
         tmp_icon.SetActive(true);
 
         GameObject tmp = GameObject.Instantiate(Template_Arrow,curTarget.transform);
@@ -186,7 +186,7 @@ public class ToolBoxManager : MonoBehaviour
                 if (!myIconPointerList[i].GetComponent<IconPointer>().isBottonClicked())
                 {
                     Vector2 pos = myIconPointerList[j].GetComponent<RectTransform>().anchoredPosition;
-                    pos.x = minBorder_IconPointer * Screen.width + j * distance_IconPointer * Screen.width;
+                    pos.x = minBorder_IconPointer + j * distance_IconPointer;
                     myIconPointerList[i].GetComponent<RectTransform>().anchoredPosition = pos;
                 }
 
@@ -194,7 +194,7 @@ public class ToolBoxManager : MonoBehaviour
                 if (!myIconPointerList[j].GetComponent<IconPointer>().isBottonClicked())
                 {
                     Vector2 pos = myIconPointerList[i].GetComponent<RectTransform>().anchoredPosition;
-                    pos.x = minBorder_IconPointer * Screen.width + i * distance_IconPointer * Screen.width;
+                    pos.x = minBorder_IconPointer  + i * distance_IconPointer;
                     myIconPointerList[j].GetComponent<RectTransform>().anchoredPosition = pos;
                 }
 
